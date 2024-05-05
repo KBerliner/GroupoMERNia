@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { signup } from "../features/user/userSlice";
+import { useNavigate } from "react-router-dom";
+import { signup, login } from "../features/user/userSlice";
 import ProfilePictureInput from "./ProfilePictureInput";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -8,9 +9,11 @@ import CloseIcon from "@mui/icons-material/Close";
 import Image from "../../public/icon-left-font-monochrome-black.svg";
 import xss from "xss";
 
-export default function UserForm({ onExit }) {
+export default function UserForm({ loggingIn }) {
 	const loading = useSelector((state) => state.users.loading);
+	const user = useSelector((state) => state.users.user._id);
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 	const generalRegex = /^[a-zA-Z0-9\s.,'-]+$/;
@@ -20,7 +23,6 @@ export default function UserForm({ onExit }) {
 	const [email, setEmail] = useState("");
 	const [pfp, setPfp] = useState("");
 	const [valid, setValid] = useState(false);
-	const [login, setLogin] = useState(false);
 
 	const handleChange = (input, value) => {
 		switch (input) {
@@ -36,7 +38,7 @@ export default function UserForm({ onExit }) {
 		}
 	};
 
-	useEffect(() => {
+	const signupValid = () => {
 		if (
 			generalRegex.test(username) &&
 			emailRegex.test(email) &&
@@ -49,9 +51,29 @@ export default function UserForm({ onExit }) {
 		} else {
 			setValid(false);
 		}
-	}, [username, email, password]);
+	};
 
-	const handleSubmit = (e) => {
+	const loginValid = () => {
+		if (
+			emailRegex.test(email) &&
+			generalRegex.test(password) &&
+			email &&
+			password &&
+			!username
+		) {
+			setValid(true);
+		} else {
+			setValid(false);
+		}
+	};
+
+	useEffect(() => {
+		loggingIn ? loginValid() : signupValid();
+		console.log(user?._id);
+		user && navigate("/");
+	}, [username, email, password, user]);
+
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		console.log({
 			username,
@@ -59,14 +81,12 @@ export default function UserForm({ onExit }) {
 			email,
 			pfp,
 		});
-		dispatch(
-			signup({
-				username,
-				password,
-				email,
-				pfp,
-			})
-		);
+
+		console.log(loggingIn);
+
+		const result = (await loggingIn)
+			? dispatch(login({ email, password }))
+			: dispatch(signup({ username, password, email, pfp }));
 	};
 
 	return (
@@ -76,13 +96,13 @@ export default function UserForm({ onExit }) {
 				<CloseIcon
 					sx={{ fontSize: 40 }}
 					className="z-10 absolute top-8 right-8 cursor-pointer"
-					onClick={onExit}
+					onClick={() => navigate("/")}
 				/>
 				<img src={Image} className="mb-8 w-80 self-center" />
 				<h2 className="self-center text-xl leading-3 font-semibold tracking-wide">
-					{login ? "Login Below" : "Signup Below"}
+					{loggingIn ? "Login Below" : "Signup Below"}
 				</h2>
-				{!login && (
+				{!loggingIn && (
 					<TextField
 						label="Username"
 						variant="standard"
@@ -104,23 +124,29 @@ export default function UserForm({ onExit }) {
 					onChange={({ target }) => handleChange("password", target.value)}
 					value={password}
 				/>
-				{!login && (
+				{!loggingIn && (
 					<ProfilePictureInput pfp={pfp} change={(data) => setPfp(data)} />
 				)}
 				<Button variant="contained" onClick={handleSubmit} disabled={!valid}>
 					Submit
 				</Button>
-				{!login ? (
+				{!loggingIn ? (
 					<p>
 						Already have an account?{" "}
-						<strong className="cursor-pointer" onClick={() => setLogin(!login)}>
+						<strong
+							className="cursor-pointer"
+							onClick={() => navigate("/login")}
+						>
 							Login Here
 						</strong>
 					</p>
 				) : (
 					<p>
 						Don't have an account yet?{" "}
-						<strong className="cursor-pointer" onClick={() => setLogin(!login)}>
+						<strong
+							className="cursor-pointer"
+							onClick={() => navigate("/signup")}
+						>
 							Signup Here
 						</strong>
 					</p>
