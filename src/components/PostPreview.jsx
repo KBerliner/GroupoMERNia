@@ -72,13 +72,6 @@ export default function Post({
 						<p>0</p>
 					</>
 				)}
-				<Chip
-					variant="outlined"
-					color="info"
-					size="small"
-					label="Show More"
-					sx={{ marginLeft: "auto" }}
-				/>
 			</CardActions>
 		</Card>
 	);

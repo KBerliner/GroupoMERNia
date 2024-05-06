@@ -129,14 +129,6 @@ export default function Post({ post }) {
 				) : (
 					<p>Login to interact with this post!</p>
 				)}
-				<Chip
-					variant="outlined"
-					color="info"
-					size="small"
-					label="Show More"
-					sx={{ marginLeft: "auto" }}
-					onClick={onShowMore}
-				/>
 			</CardActions>
 		</Card>
 	);
