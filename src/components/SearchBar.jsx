@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TextField, InputAdornment } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 export default function SearchBar({ onSearch }) {
 	const [query, setQuery] = useState("");
 
+	useEffect(() => {
+		onSearch(query);
+	}, [query]);
+
 	return (
-		<form className="flex" onSubmit={onSearch(query)}>
+		<form className="flex">
 			<TextField
 				id="standard-basic"
 				variant="outlined"

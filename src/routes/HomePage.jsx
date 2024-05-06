@@ -26,9 +26,13 @@ export default function HomePage() {
 
 	const [query, setQuery] = useState("");
 
+	const search = (value) => {
+		setQuery(value);
+	};
+
 	return (
 		<>
-			<Header onSearch={(value) => setQuery(value)} />
+			<Header onSearch={(value) => search(value)} />
 			<ul className="my-32 py-12 px-32 flex flex-col-reverse">
 				{posts &&
 					posts.map((post) => {
