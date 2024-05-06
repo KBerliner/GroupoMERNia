@@ -6,7 +6,7 @@ import SearchBar from "./SearchBar";
 import { ButtonGroup, Button, TextField, InputAdornment } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
-export default function Header() {
+export default function Header({ onSearch }) {
 	const navigate = useNavigate();
 	const user = useSelector((state) => state.users.user);
 
@@ -14,7 +14,7 @@ export default function Header() {
 		<>
 			<header className="shadow grid grid-cols-3 py-8 px-12 bg-yellow-100/40 backdrop-filter backdrop-blur-xl bg-center fixed top-0 right-0 left-0 z-20 h-32">
 				<img src={Logo} className="w-64 self-center" />
-				<SearchBar className="my-auto" />
+				<SearchBar className="my-auto" onSearch={onSearch} />
 				{!user._id ? (
 					<ButtonGroup className="flex justify-end">
 						<Button variant="outlined" onClick={() => navigate("/login")}>
@@ -27,7 +27,7 @@ export default function Header() {
 				) : (
 					<img
 						src={user.profilePictureUrl}
-						className="w-16 h-16 object-cover rounded-full shadow-lg justify-self-end"
+						className="w-16 h-16 object-cover rounded-full shadow-lg justify-self-end cursor-pointer"
 						onClick={() => navigate("/profile")}
 					/>
 				)}

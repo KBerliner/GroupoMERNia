@@ -106,7 +106,7 @@ export default function Post({ post }) {
 				/>
 			)}
 			<CardContent>
-				<p>{post.caption}</p>
+				<p className="break-words">{post.caption}</p>
 			</CardContent>
 			<CardActions disableSpacing>
 				{user?._id && post.likesEnabled && !loading ? (
@@ -123,10 +123,6 @@ export default function Post({ post }) {
 							)}
 						</IconButton>
 						<p>{dislikes}</p>
-						<IconButton aria-label="share">{/* <ShareIcon /> */}</IconButton>
-						<IconButton aria-label="comment">
-							{/* <CommentIcon /> */}
-						</IconButton>
 					</>
 				) : loading ? (
 					<p>Loading...</p>

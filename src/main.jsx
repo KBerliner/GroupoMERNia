@@ -11,6 +11,7 @@ import store from "./store";
 import "./index.css";
 import UserForm from "./components/UserForm.jsx";
 import ProfilePage from "./routes/ProfilePage.jsx";
+import PostPage from "./routes/PostPage.jsx";
 
 const router = createBrowserRouter([
 	{
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
 	{
 		path: "/profile",
 		element: <ProfilePage />,
+	},
+	{
+		path: "/post/:type",
+		element: <PostPage />,
 	},
 ]);
 

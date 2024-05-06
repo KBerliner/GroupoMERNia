@@ -61,6 +61,21 @@ export const getAll = createAsyncThunk("posts/getAll", async () => {
 	return data;
 });
 
+export const create = createAsyncThunk("posts/create", async (body) => {
+	console.log("HERES THE BODY", body);
+	const response = await fetch("http://localhost:3123/api/posts", {
+		method: "POST",
+		credentials: "include",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(body),
+	});
+
+	const data = await response.json();
+	return data.post;
+});
+
 export const postsSlice = createSlice({
 	name: "posts",
 	initialState: {
@@ -111,6 +126,20 @@ export const postsSlice = createSlice({
 			state.loading = false;
 		});
 		builder.addCase(dislikePost.pending, (state, action) => {
+			state.error = false;
+			state.loading = true;
+		});
+		builder.addCase(create.fulfilled, (state, action) => {
+			console.log(action.payload);
+			state.posts.push(action.payload);
+			state.error = false;
+			state.loading = false;
+		});
+		builder.addCase(create.rejected, (state, action) => {
+			state.error = true;
+			state.loading = false;
+		});
+		builder.addCase(create.pending, (state, action) => {
 			state.error = false;
 			state.loading = true;
 		});
