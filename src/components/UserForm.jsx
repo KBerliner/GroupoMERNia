@@ -11,7 +11,7 @@ import xss from "xss";
 
 export default function UserForm({ loggingIn }) {
 	const loading = useSelector((state) => state.users.loading);
-	const user = useSelector((state) => state.users.user._id);
+	const user = useSelector((state) => state.users.user?._id);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
@@ -69,20 +69,11 @@ export default function UserForm({ loggingIn }) {
 
 	useEffect(() => {
 		loggingIn ? loginValid() : signupValid();
-		console.log(user?._id);
-		user && navigate("/");
+		user?._id && navigate("/");
 	}, [username, email, password, user]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log({
-			username,
-			password,
-			email,
-			pfp,
-		});
-
-		console.log(loggingIn);
 
 		const result = (await loggingIn)
 			? dispatch(login({ email, password }))

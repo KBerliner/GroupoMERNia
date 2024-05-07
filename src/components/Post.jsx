@@ -17,9 +17,10 @@ import {
 	ThumbUpOffAlt,
 	ThumbUpAlt,
 	MoreVert,
+	PersonAdd,
 } from "@mui/icons-material";
 
-export default function Post({ post }) {
+export default function Post({ post, sendFriendRequest }) {
 	const dispatch = useDispatch();
 
 	const user = useSelector((state) => state.users.user);
@@ -93,7 +94,13 @@ export default function Post({ post }) {
 						<IconButton>
 							<MoreVert></MoreVert>
 						</IconButton>
-					) : null
+					) : (
+						!user?._id?.includes(post.authorId) && (
+							<IconButton onClick={() => sendFriendRequest(post.authorId)}>
+								<PersonAdd />
+							</IconButton>
+						)
+					)
 				}
 			/>
 			{post.imageUrl && (

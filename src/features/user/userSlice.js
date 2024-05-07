@@ -65,6 +65,32 @@ export const persist = createAsyncThunk("users/persist", async () => {
 	}
 });
 
+export const sendFriendRequest = createAsyncThunk(
+	"users/sendFriendRequest",
+	async (body) => {
+		console.log("Sending friend request", body);
+		const response = await fetch(
+			"http://localhost:3123/api/users/sendFriendRequest",
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify(body),
+			}
+		);
+
+		const data = await response.json();
+
+		if (!response.ok) {
+			throw new Error(data.error);
+		} else {
+			return data;
+		}
+	}
+);
+
 export const userSlice = createSlice({
 	name: "user",
 	initialState: {
