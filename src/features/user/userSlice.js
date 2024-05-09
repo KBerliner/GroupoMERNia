@@ -74,7 +74,7 @@ export const sendFriendRequest = createAsyncThunk(
 	async (body) => {
 		console.log("Sending friend request", body);
 		const response = await fetch(`${apiUrl}/api/users/sendFriendRequest`, {
-			method: "POST",
+			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
 			},

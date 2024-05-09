@@ -3,7 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Logo from "../../public/icon-left-font-monochrome-black.svg";
 import SearchBar from "./SearchBar";
-import { ButtonGroup, Button, TextField, InputAdornment } from "@mui/material";
+import {
+	ButtonGroup,
+	Button,
+	TextField,
+	InputAdornment,
+	Avatar,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 export default function Header({ onSearch }) {
@@ -25,11 +31,14 @@ export default function Header({ onSearch }) {
 						</Button>
 					</ButtonGroup>
 				) : (
-					<img
-						src={user.profilePictureUrl}
-						className="w-16 h-16 object-cover rounded-full shadow-lg justify-self-end cursor-pointer"
+					<Avatar
+						src={user?.profilePictureUrl}
+						className="justify-self-end cursor-pointer"
 						onClick={() => navigate("/profile")}
-					/>
+						sx={{ width: "4rem", height: "4rem", fontSize: "2rem" }}
+					>
+						{user.username[0].toUpperCase()}
+					</Avatar>
 				)}
 			</header>
 		</>

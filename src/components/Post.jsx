@@ -95,7 +95,8 @@ export default function Post({ post, sendFriendRequest }) {
 							<MoreVert></MoreVert>
 						</IconButton>
 					) : (
-						!user?._id?.includes(post.authorId) && (
+						!user?._id?.includes(post.authorId) &&
+						user?._id && (
 							<IconButton onClick={() => sendFriendRequest(post.authorId)}>
 								<PersonAdd />
 							</IconButton>

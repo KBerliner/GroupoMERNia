@@ -69,7 +69,7 @@ export default function UserForm({ loggingIn }) {
 
 	useEffect(() => {
 		loggingIn ? loginValid() : signupValid();
-		user?._id && navigate("/");
+		user ? navigate("/") : null;
 	}, [username, email, password, user]);
 
 	const handleSubmit = async (e) => {
