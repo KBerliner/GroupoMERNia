@@ -1,39 +1,13 @@
+// console.log(import.meta.env.PROD);
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// export const signup = createAsyncThunk("user/signup", async (body) => {
-// 	console.log(body);
-// 	const response = await fetch("http://localhost:3123/api/users/signup", {
-// 		method: "POST",
-// 		headers: {
-// 			"Content-Type": "application/json",
-// 		},
-// 		body: JSON.stringify(body),
-// 	});
-
-// 	const data = await response.json();
-// 	return data.user;
-// });
-
-// export const login = createAsyncThunk("user/login", async (body) => {
-// 	const response = await fetch("http://localhost:3123/api/users/login", {
-// 		method: "POST",
-// 		headers: {
-// 			"Content-Type": "application/json",
-// 		},
-// 		body: JSON.stringify(body),
-// 	});
-
-// 	const data = await response.json();
-
-// 	if (!response.ok) {
-// 		throw new Error(data.error);
-// 	} else {
-// 		return data.user;
-// 	}
-// });
+const apiUrl = import.meta.env.PROD
+	? "https://groupomapi-04954ed60b77.herokuapp.com"
+	: "http://localhost:3123";
 
 export const likePost = createAsyncThunk("posts/like", async (id) => {
-	const response = await fetch(`http://localhost:3123/api/posts/like/${id}`, {
+	const response = await fetch(`${apiUrl}/api/posts/like/${id}`, {
 		method: "PUT",
 		credentials: "include",
 	});
@@ -43,27 +17,24 @@ export const likePost = createAsyncThunk("posts/like", async (id) => {
 });
 
 export const dislikePost = createAsyncThunk("posts/dislike", async (id) => {
-	const response = await fetch(
-		`http://localhost:3123/api/posts/dislike/${id}`,
-		{
-			method: "PUT",
-			credentials: "include",
-		}
-	);
+	const response = await fetch(`${apiUrl}/api/posts/dislike/${id}`, {
+		method: "PUT",
+		credentials: "include",
+	});
 
 	const data = await response.json();
 	return data;
 });
 
 export const getAll = createAsyncThunk("posts/getAll", async () => {
-	const response = await fetch("http://localhost:3123/api/posts");
+	const response = await fetch(`${apiUrl}/api/posts`);
 	const data = await response.json();
 	return data;
 });
 
 export const create = createAsyncThunk("posts/create", async (body) => {
 	console.log("HERES THE BODY", body);
-	const response = await fetch("http://localhost:3123/api/posts", {
+	const response = await fetch(`${apiUrl}/api/posts`, {
 		method: "POST",
 		credentials: "include",
 		headers: {

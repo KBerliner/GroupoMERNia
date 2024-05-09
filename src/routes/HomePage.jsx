@@ -17,6 +17,10 @@ export default function HomePage() {
 	const posts = useSelector((state) => state.posts.posts);
 	const user = useSelector((state) => state.users.user);
 
+	const apiUrl = import.meta.env.PROD
+		? "https://groupomapi-04954ed60b77.herokuapp.com"
+		: "http://localhost:3123";
+
 	useEffect(() => {
 		dispatch(persist());
 		dispatch(getAll());
@@ -28,7 +32,7 @@ export default function HomePage() {
 
 	useEffect(() => {
 		if (user?._id) {
-			const newSocket = io("http://localhost:3123");
+			const newSocket = io(`${apiUrl}`);
 			setSocket(newSocket);
 
 			return () => newSocket.disconnect();

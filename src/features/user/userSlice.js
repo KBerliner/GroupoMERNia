@@ -1,8 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
+const apiUrl = import.meta.env.PROD
+	? "https://groupomapi-04954ed60b77.herokuapp.com"
+	: "http://localhost:3123";
+
 export const signup = createAsyncThunk("user/signup", async (body) => {
 	console.log(body);
-	const response = await fetch("http://localhost:3123/api/users/signup", {
+	const response = await fetch(`${apiUrl}/api/users/signup`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -15,7 +19,7 @@ export const signup = createAsyncThunk("user/signup", async (body) => {
 });
 
 export const login = createAsyncThunk("user/login", async (body) => {
-	const response = await fetch("http://localhost:3123/api/users/login", {
+	const response = await fetch(`${apiUrl}/api/users/login`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -48,7 +52,7 @@ export const deleteAccount = createAsyncThunk(
 );
 
 export const persist = createAsyncThunk("users/persist", async () => {
-	const response = await fetch("http://localhost:3123/api/users/persist", {
+	const response = await fetch(`${apiUrl}/api/users/persist`, {
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json",
@@ -69,17 +73,14 @@ export const sendFriendRequest = createAsyncThunk(
 	"users/sendFriendRequest",
 	async (body) => {
 		console.log("Sending friend request", body);
-		const response = await fetch(
-			"http://localhost:3123/api/users/sendFriendRequest",
-			{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				credentials: "include",
-				body: JSON.stringify(body),
-			}
-		);
+		const response = await fetch(`${apiUrl}/api/users/sendFriendRequest`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			credentials: "include",
+			body: JSON.stringify(body),
+		});
 
 		const data = await response.json();
 
@@ -162,6 +163,23 @@ export const userSlice = createSlice({
 			state.loading = false;
 		});
 		builder.addCase(persist.pending, (state, action) => {
+			state.error = false;
+			state.loading = true;
+		});
+		builder.addCase(sendFriendRequest.fulfilled, (state, action) => {
+			if (action.payload.type === "friend") {
+				state.user.friends.push(action.payload.request);
+			} else {
+				state.user.sentRequests.push(action.payload.request);
+			}
+			state.error = false;
+			state.loading = false;
+		});
+		builder.addCase(sendFriendRequest.rejected, (state, action) => {
+			state.error = true;
+			state.loading = false;
+		});
+		builder.addCase(sendFriendRequest.pending, (state, action) => {
 			state.error = false;
 			state.loading = true;
 		});
