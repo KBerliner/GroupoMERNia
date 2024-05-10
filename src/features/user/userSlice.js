@@ -37,6 +37,21 @@ export const login = createAsyncThunk("user/login", async (body) => {
 	}
 });
 
+export const logout = createAsyncThunk("user/logout", async () => {
+	const response = await fetch(`${apiUrl}/api/users/logout`, {
+		method: "POST",
+		credentials: "include",
+	});
+
+	const data = await response.json();
+
+	if (!response.ok) {
+		throw new Error(data.error);
+	} else {
+		return data.success;
+	}
+});
+
 export const editAccount = createAsyncThunk(
 	"user/edit_account",
 	async (body) => {
@@ -143,6 +158,19 @@ export const userSlice = createSlice({
 			state.loading = false;
 		});
 		builder.addCase(login.pending, (state, action) => {
+			state.error = false;
+			state.loading = true;
+		});
+		builder.addCase(logout.fulfilled, (state, action) => {
+			state.user = {};
+			state.error = false;
+			state.loading = false;
+		});
+		builder.addCase(logout.rejected, (state, action) => {
+			state.error = true;
+			state.loading = false;
+		});
+		builder.addCase(logout.pending, (state, action) => {
 			state.error = false;
 			state.loading = true;
 		});

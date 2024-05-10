@@ -20,7 +20,7 @@ import { ArrowBack } from "@mui/icons-material";
 import ProfileTabPanel from "../components/ProfileTabPanel";
 import FriendsTable from "../components/FriendsTable";
 
-import { deleteAccount, editAccount } from "../features/user/userSlice";
+import { deleteAccount, editAccount, logout } from "../features/user/userSlice";
 import ProfilePictureInput from "../components/ProfilePictureInput";
 
 export default function ProfilePage() {
@@ -101,6 +101,11 @@ export default function ProfilePage() {
 		navigate("/");
 	};
 
+	const handleLogout = () => {
+		dispatch(logout());
+		navigate("/");
+	};
+
 	const handleEdit = (e) => {
 		e.preventDefault();
 		console.log("SUBMIT");
@@ -145,6 +150,7 @@ export default function ProfilePage() {
 						variant="contained"
 						color="secondary"
 						sx={{ maxWidth: "6rem", marginBottom: "1rem" }}
+						onClick={handleLogout}
 					>
 						Logout
 					</Button>
