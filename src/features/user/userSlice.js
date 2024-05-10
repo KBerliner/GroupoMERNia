@@ -40,7 +40,26 @@ export const login = createAsyncThunk("user/login", async (body) => {
 export const editAccount = createAsyncThunk(
 	"user/edit_account",
 	async (body) => {
-		console.log(body);
+		const formData = new FormData();
+		if (body.pfp) {
+			formData.append("file", body.pfp);
+		}
+
+		formData.append("email", body.email);
+
+		const response = await fetch(`${apiUrl}/api/users/`, {
+			method: "PUT",
+			body: formData,
+			credentials: "include",
+		});
+
+		const data = await response.json();
+
+		if (!response.ok) {
+			throw new Error(data.error);
+		} else {
+			return data.user;
+		}
 	}
 );
 

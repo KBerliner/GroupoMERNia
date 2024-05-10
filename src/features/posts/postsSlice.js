@@ -33,18 +33,28 @@ export const getAll = createAsyncThunk("posts/getAll", async () => {
 });
 
 export const create = createAsyncThunk("posts/create", async (body) => {
-	console.log("HERES THE BODY", body);
+	const formData = new FormData();
+
+	if (body.image) {
+		formData.append("file", body.image);
+	}
+	formData.append("title", body.title);
+	formData.append("caption", body.caption);
+	formData.append("likesEnabled", body.likesEnabled);
+
 	const response = await fetch(`${apiUrl}/api/posts`, {
 		method: "POST",
 		credentials: "include",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify(body),
+		body: formData,
 	});
 
 	const data = await response.json();
-	return data.post;
+
+	if (!response.ok) {
+		throw new Error(response.error);
+	} else {
+		return data.post;
+	}
 });
 
 export const postsSlice = createSlice({
