@@ -116,12 +116,6 @@ export default function ProfilePage() {
 		e.preventDefault();
 		console.log("DELETE");
 		// navigate("/");
-		socket.emit("friendRequest", {
-			senderId: user._id,
-			recipientId: "66395210c06309a8bb5a1c3d",
-			senderName: user.username,
-			senderPfp: user.profilePictureUrl || "",
-		});
 	};
 
 	return (
@@ -205,25 +199,16 @@ export default function ProfilePage() {
 						</form>
 					</ProfileTabPanel>
 					<ProfileTabPanel value={currentTab} index={1}>
-						<FriendsTable
-							data={[
-								{
-									_id: 1234,
-									username: "test",
-									date: "2024-12-25",
-								},
-							]}
-							type="sent"
-						/>
+						<FriendsTable data={sentRequests} type="sent" />
 					</ProfileTabPanel>
 					<ProfileTabPanel value={currentTab} index={2}>
 						<FriendsTable data={receivedRequests} type="received" />
 					</ProfileTabPanel>
 					<ProfileTabPanel value={currentTab} index={3}>
-						<FriendsTable data="" type="friends" />
+						<FriendsTable data={friends} type="friends" />
 					</ProfileTabPanel>
 					<ProfileTabPanel value={currentTab} index={4}>
-						<FriendsTable data="" type="blocked" />
+						<FriendsTable data={blocked} type="blocked" />
 					</ProfileTabPanel>
 					<ProfileTabPanel value={currentTab} index={5}>
 						<h1>Messages</h1>

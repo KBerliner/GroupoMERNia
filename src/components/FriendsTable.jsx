@@ -22,6 +22,8 @@ export default function FriendsTable({ data, type }) {
 		button = "Unblock";
 	}
 
+	console.log("table data: ", data);
+
 	return (
 		<TableContainer>
 			<Table stickyHeader>
