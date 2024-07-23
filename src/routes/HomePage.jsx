@@ -77,8 +77,14 @@ export default function HomePage() {
 			date: Date.now(),
 		};
 
-		dispatch(sendFriendRequest(requestBody));
-		socket.emit("friendRequest", requestBody);
+		if (
+			!user.sentRequests.find((request) => request.recipientId === recipient)
+		) {
+			dispatch(sendFriendRequest(requestBody));
+			socket.emit("friendRequest", requestBody);
+		} else {
+			console.log("Friend request already sent");
+		}
 	};
 
 	return (
