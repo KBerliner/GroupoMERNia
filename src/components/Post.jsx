@@ -135,7 +135,9 @@ export default function Post({ post, sendFriendRequest }) {
 				) : loading ? (
 					<p>Loading...</p>
 				) : (
-					<p>Login to interact with this post!</p>
+					<p className="text-gray-400 text-xs ml-2 mb-2">
+						Login to interact with this post!
+					</p>
 				)}
 			</CardActions>
 		</Card>
