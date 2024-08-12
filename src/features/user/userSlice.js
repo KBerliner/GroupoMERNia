@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { get } from "mongoose";
 
 const apiUrl = import.meta.env.PROD
 	? "https://groupomapi-04954ed60b77.herokuapp.com"
@@ -130,8 +131,17 @@ export const userSlice = createSlice({
 	name: "user",
 	initialState: {
 		user: {},
+		newPosts: false,
 		error: false,
 		loading: false,
+	},
+	reducers: {
+		getNewPostUpdate(state) {
+			state.newPosts = true;
+		},
+		reloadForNewPost(state) {
+			state.newPosts = false;
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(signup.fulfilled, (state, action) => {
@@ -233,4 +243,5 @@ export const userSlice = createSlice({
 	},
 });
 
+export const { getNewPostUpdate, reloadForNewPost } = userSlice.actions;
 export default userSlice.reducer;
