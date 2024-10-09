@@ -17,6 +17,8 @@ export default function HomePage() {
 	const posts = useSelector((state) => state.posts.posts);
 	const user = useSelector((state) => state.users.user);
 
+	const [newPosts, setNewPosts] = useState(false);
+
 	const apiUrl = import.meta.env.PROD
 		? "https://groupomapi-04954ed60b77.herokuapp.com"
 		: "http://localhost:3123";
@@ -28,6 +30,7 @@ export default function HomePage() {
 
 	const refresh = () => {
 		dispatch(getAll());
+		setNewPosts(false);
 	};
 
 	useEffect(() => {
@@ -53,6 +56,10 @@ export default function HomePage() {
 
 			socket.on("receivedFriendRequest", (request) => {
 				console.log(request);
+			});
+
+			socket.on("newPost", () => {
+				setNewPosts(true);
 			});
 
 			return () => {
@@ -105,16 +112,18 @@ export default function HomePage() {
 							);
 						}
 					})}
-				<li className="flex justify-center">
-					<Fab
-						sx={{ zIndex: 10 }}
-						size="small"
-						color="primary"
-						onClick={refresh}
-					>
-						<Refresh fontSize="medium"></Refresh>
-					</Fab>
-				</li>
+				{newPosts && (
+					<li className="flex justify-center">
+						<Fab
+							sx={{ zIndex: 10 }}
+							size="small"
+							color="primary"
+							onClick={refresh}
+						>
+							<Refresh fontSize="medium"></Refresh>
+						</Fab>
+					</li>
+				)}
 			</ul>
 			{user._id && (
 				<Fab

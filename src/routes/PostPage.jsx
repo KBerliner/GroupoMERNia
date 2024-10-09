@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import xss from "xss";
+import { io } from "socket.io-client";
 
 import { create } from "../features/posts/postsSlice";
 
@@ -23,6 +24,7 @@ export default function PostPage() {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.users.user);
+	const [socket, setSocket] = useState(null);
 
 	const [title, setTitle] = useState("");
 	const [caption, setCaption] = useState("");
@@ -31,11 +33,39 @@ export default function PostPage() {
 
 	const [valid, setValid] = useState(false);
 
+	const apiUrl = import.meta.env.PROD
+		? "https://groupomapi-04954ed60b77.herokuapp.com"
+		: "http://localhost:3123";
+
 	useEffect(() => {
 		if (!user._id) {
 			navigate("/login");
+		} else if (user?._id) {
+			const newSocket = io(`${apiUrl}`);
+			setSocket(newSocket);
+
+			return () => newSocket.disconnect();
 		}
 	}, [user]);
+
+	useEffect(() => {
+		if (socket && user?._id) {
+			socket.on("connect_error", (err) => {
+				console.error("Connection error due to: ", err);
+			});
+
+			socket.on("connect", () => {
+				console.log("Connected!");
+			});
+
+			socket.emit("addUser", user._id);
+
+			return () => {
+				socket?.off("connect");
+				socket?.off("connect_error");
+			};
+		}
+	}, [socket, user]);
 
 	useEffect(() => {
 		setValid(title === xss(title) && caption === xss(caption) && title);
@@ -45,6 +75,7 @@ export default function PostPage() {
 		e.preventDefault();
 		if (type === "create") {
 			dispatch(create({ title, caption, image, likesEnabled }));
+			socket.emit("post");
 		}
 
 		navigate("/");
@@ -52,7 +83,7 @@ export default function PostPage() {
 
 	return (
 		<>
-			<div className="bg-[url('../../public/PostFormBackground.webp')] bg-cover w-screen h-screen z-0 absolute top-0"></div>
+			<div className="bg-[url('/PostFormBackground.webp')] bg-cover w-screen h-screen z-0 absolute top-0"></div>
 			<div className="my-12 mx-auto w-10/12 shadow rounded-md backdrop-filter backdrop-blur-xl">
 				<CloseIcon
 					sx={{ fontSize: 40 }}
