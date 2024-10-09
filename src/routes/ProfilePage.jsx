@@ -18,7 +18,6 @@ import xss from "xss";
 import { ArrowBack } from "@mui/icons-material";
 
 import ProfileTabPanel from "../components/ProfileTabPanel";
-import FriendsTable from "../components/FriendsTable";
 
 import { deleteAccount, editAccount, logout } from "../features/user/userSlice";
 import ProfilePictureInput from "../components/ProfilePictureInput";
@@ -199,19 +198,23 @@ export default function ProfilePage() {
 						</form>
 					</ProfileTabPanel>
 					<ProfileTabPanel value={currentTab} index={1}>
-						<FriendsTable data={sentRequests} type="sent" />
+						{/* <FriendsTable data={sentRequests} type="sent" /> */}
+						<h3>On the way!</h3>
 					</ProfileTabPanel>
 					<ProfileTabPanel value={currentTab} index={2}>
-						<FriendsTable data={receivedRequests} type="received" />
+						{/* <FriendsTable data={receivedRequests} type="received" /> */}
+						<h3>On the way!</h3>
 					</ProfileTabPanel>
 					<ProfileTabPanel value={currentTab} index={3}>
-						<FriendsTable data={friends} type="friends" />
+						{/* <FriendsTable data={friends} type="friends" /> */}
+						<h3>On the way!</h3>
 					</ProfileTabPanel>
 					<ProfileTabPanel value={currentTab} index={4}>
-						<FriendsTable data={blocked} type="blocked" />
+						{/* <FriendsTable data={blocked} type="blocked" /> */}
+						<h3>On the way!</h3>
 					</ProfileTabPanel>
 					<ProfileTabPanel value={currentTab} index={5}>
-						<h1>Messages</h1>
+						<h3>Messages (On the Way!)</h3>
 					</ProfileTabPanel>
 				</div>
 			</div>
