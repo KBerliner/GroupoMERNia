@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { get } from "mongoose";
 
 const apiUrl = import.meta.env.PROD
 	? "https://groupomapi-04954ed60b77.herokuapp.com"
