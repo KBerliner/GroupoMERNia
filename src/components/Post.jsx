@@ -37,18 +37,15 @@ export default function Post({ post, sendFriendRequest }) {
 	const onLike = () => {
 		if (!loading) {
 			if (userLikedStatus === null) {
-				console.log("ONE");
 				setUserLikedStatus(true);
 				dispatch(likePost(post._id));
 				likes++;
 			} else if (userLikedStatus === false) {
-				console.log("TWO");
 				setUserLikedStatus(true);
 				dispatch(likePost(post._id));
 				dislikes--;
 				likes++;
 			} else {
-				console.log("THREE");
 				setUserLikedStatus(null);
 				likes--;
 			}
@@ -81,7 +78,7 @@ export default function Post({ post, sendFriendRequest }) {
 				setUserLikedStatus(null);
 			}
 		}
-	}, []);
+	}, [user]);
 
 	return (
 		<Card className="w-96">

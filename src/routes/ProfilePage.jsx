@@ -41,7 +41,9 @@ export default function ProfilePage() {
 		if (!user._id) {
 			navigate("/login");
 		} else {
-			const newSocket = io("http://localhost:3123");
+			const newSocket = import.meta.env.PROD
+				? io("https://groupomapi-04954ed60b77.herokuapp.com")
+				: io("http://localhost:3123");
 			setSocket(newSocket);
 
 			return () => newSocket.disconnect();
