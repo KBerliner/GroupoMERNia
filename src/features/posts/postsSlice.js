@@ -1,5 +1,3 @@
-// console.log(import.meta.env.PROD);
-
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const apiUrl = import.meta.env.PROD

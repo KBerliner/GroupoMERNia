@@ -16,6 +16,7 @@ export default function HomePage() {
 
 	const posts = useSelector((state) => state.posts.posts);
 	const user = useSelector((state) => state.users.user);
+	const loading = useSelector((state) => state.users.loading);
 
 	const [newPosts, setNewPosts] = useState(false);
 
@@ -24,7 +25,10 @@ export default function HomePage() {
 		: "http://localhost:3123";
 
 	useEffect(() => {
-		dispatch(persist());
+		// Keeping persist from being dispatched on logout
+		if (!loading) {
+			dispatch(persist());
+		}
 		dispatch(getAll());
 	}, []);
 
