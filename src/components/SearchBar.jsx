@@ -10,7 +10,12 @@ export default function SearchBar({ onSearch }) {
 	}, [query]);
 
 	return (
-		<form className="flex">
+		<form
+			onSubmit={(e) => {
+				e.preventDefault();
+			}}
+			className="flex"
+		>
 			<TextField
 				id="standard-basic"
 				variant="outlined"
