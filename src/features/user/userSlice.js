@@ -38,18 +38,24 @@ export const login = createAsyncThunk("user/login", async (body) => {
 });
 
 export const logout = createAsyncThunk("user/logout", async () => {
-	const response = await fetch(`${apiUrl}/api/users/logout`, {
-		method: "POST",
-		credentials: "include",
-	});
+	const request = () => {
+		return fetch(`${apiUrl}/api/users/logout`, {
+			method: "POST",
+			credentials: "include",
+		});
+	};
 
-	const data = await response.json();
+	let response = await request();
 
 	if (!response.ok) {
-		throw new Error(data.error);
-	} else {
-		return data.success;
+		response = await persist(request);
+		if (!response.ok) {
+			throw new Error(response.error);
+		}
 	}
+
+	const data = await response.json();
+	return data.success;
 });
 
 export const editAccount = createAsyncThunk(
