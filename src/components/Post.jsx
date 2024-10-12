@@ -55,11 +55,14 @@ export default function Post({ post, sendFriendRequest }) {
 		if (!loading) {
 			if (userLikedStatus === null) {
 				setUserLikedStatus(false);
-				!loading ? dispatch(likePost(post._id)) : console.log("Almost!");
+				dislikes++;
 			} else if (userLikedStatus) {
 				setUserLikedStatus(false);
+				dislikes++;
+				likes--;
 			} else {
 				setUserLikedStatus(null);
+				dislikes--;
 			}
 
 			dispatch(dislikePost(post._id));
@@ -68,6 +71,7 @@ export default function Post({ post, sendFriendRequest }) {
 
 	useEffect(() => {
 		if (user?._id) {
+			console.log("testing for test id");
 			if (post.usersLiked.includes(user?._id)) {
 				setUserLikedStatus(true);
 			} else if (post.usersDisliked.includes(user?._id)) {
