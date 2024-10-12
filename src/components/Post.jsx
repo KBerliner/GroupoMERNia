@@ -38,11 +38,9 @@ export default function Post({ post, sendFriendRequest }) {
 		if (!loading) {
 			if (userLikedStatus === null) {
 				setUserLikedStatus(true);
-				dispatch(likePost(post._id));
 				likes++;
 			} else if (userLikedStatus === false) {
 				setUserLikedStatus(true);
-				dispatch(likePost(post._id));
 				dislikes--;
 				likes++;
 			} else {
