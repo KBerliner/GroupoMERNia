@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Header from "../components/Header";
 import Post from "../components/Post";
 import { getAll } from "../features/posts/postsSlice";
-import { persist, sendFriendRequest } from "../features/user/userSlice";
+import { initialPersist, sendFriendRequest } from "../features/user/userSlice";
 import { Fab } from "@mui/material";
 import { Refresh, Add } from "@mui/icons-material";
 import { io } from "socket.io-client";
@@ -27,7 +27,7 @@ export default function HomePage() {
 	useEffect(() => {
 		// Keeping persist from being dispatched on logout
 		if (!loading) {
-			dispatch(persist());
+			dispatch(initialPersist());
 		}
 		dispatch(getAll());
 	}, []);
@@ -129,7 +129,7 @@ export default function HomePage() {
 					</li>
 				)}
 			</ul>
-			{user._id && (
+			{user?._id && (
 				<Fab
 					sx={{ position: "fixed" }}
 					className="bottom-12 right-16"

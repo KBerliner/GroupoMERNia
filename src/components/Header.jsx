@@ -21,7 +21,7 @@ export default function Header({ onSearch }) {
 			<header className="shadow grid grid-cols-3 py-8 px-12 bg-yellow-100/40 backdrop-filter backdrop-blur-xl bg-center fixed top-0 right-0 left-0 z-20 h-32">
 				<img src={Logo} className="w-64 self-center" />
 				<SearchBar className="my-auto" onSearch={onSearch} />
-				{!user._id ? (
+				{!user?._id ? (
 					<ButtonGroup className="flex justify-end">
 						<Button variant="outlined" onClick={() => navigate("/login")}>
 							Log In

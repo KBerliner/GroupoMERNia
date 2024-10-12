@@ -1,24 +1,45 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { persist } from "../../utils/persist";
 
 const apiUrl = import.meta.env.PROD
 	? "https://groupomapi-04954ed60b77.herokuapp.com"
 	: "http://localhost:3123";
 
 export const likePost = createAsyncThunk("posts/like", async (id) => {
-	const response = await fetch(`${apiUrl}/api/posts/like/${id}`, {
-		method: "PUT",
-		credentials: "include",
-	});
+	const request = () => {
+		return fetch(`${apiUrl}/api/posts/like/${id}`, {
+			method: "PUT",
+			credentials: "include",
+		});
+	};
+	let response = await request();
+
+	if (!response.ok) {
+		response = await persist(request);
+		if (!response.ok) {
+			throw new Error(response.error);
+		}
+	}
 
 	const data = await response.json();
 	return data;
 });
 
 export const dislikePost = createAsyncThunk("posts/dislike", async (id) => {
-	const response = await fetch(`${apiUrl}/api/posts/dislike/${id}`, {
-		method: "PUT",
-		credentials: "include",
-	});
+	const request = () => {
+		return fetch(`${apiUrl}/api/posts/dislike/${id}`, {
+			method: "PUT",
+			credentials: "include",
+		});
+	};
+	let response = await request();
+
+	if (!response.ok) {
+		response = await persist(request);
+		if (!response.ok) {
+			throw new Error(response.error);
+		}
+	}
 
 	const data = await response.json();
 	return data;
@@ -40,19 +61,25 @@ export const create = createAsyncThunk("posts/create", async (body) => {
 	formData.append("caption", body.caption);
 	formData.append("likesEnabled", body.likesEnabled);
 
-	const response = await fetch(`${apiUrl}/api/posts`, {
-		method: "POST",
-		credentials: "include",
-		body: formData,
-	});
+	const request = () => {
+		return fetch(`${apiUrl}/api/posts`, {
+			method: "POST",
+			credentials: "include",
+			body: formData,
+		});
+	};
 
-	const data = await response.json();
+	let response = await request();
 
 	if (!response.ok) {
-		throw new Error(response.error);
-	} else {
-		return data.post;
+		response = await persist(request);
+		if (!response.ok) {
+			throw new Error(response.error);
+		}
 	}
+
+	const data = await response.json();
+	return data.post;
 });
 
 export const postsSlice = createSlice({

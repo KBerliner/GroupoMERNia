@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { persist } from "../../utils/persist";
 
 const apiUrl = import.meta.env.PROD
 	? "https://groupomapi-04954ed60b77.herokuapp.com"
 	: "http://localhost:3123";
 
 export const signup = createAsyncThunk("user/signup", async (body) => {
-	console.log(body);
 	const response = await fetch(`${apiUrl}/api/users/signup`, {
 		method: "POST",
 		headers: {
@@ -62,19 +62,25 @@ export const editAccount = createAsyncThunk(
 
 		formData.append("email", body.email);
 
-		const response = await fetch(`${apiUrl}/api/users/`, {
-			method: "PUT",
-			body: formData,
-			credentials: "include",
-		});
+		const request = () => {
+			return fetch(`${apiUrl}/api/users/`, {
+				method: "PUT",
+				body: formData,
+				credentials: "include",
+			});
+		};
 
-		const data = await response.json();
+		let response = await request();
 
 		if (!response.ok) {
-			throw new Error(data.error);
-		} else {
-			return data.user;
+			response = await persist(request);
+			if (!response.ok) {
+				throw new Error(response.error);
+			}
 		}
+
+		const data = await response.json();
+		return data.user;
 	}
 );
 
@@ -85,44 +91,56 @@ export const deleteAccount = createAsyncThunk(
 	}
 );
 
-export const persist = createAsyncThunk("users/persist", async () => {
-	const response = await fetch(`${apiUrl}/api/users/persist`, {
-		method: "GET",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		credentials: "include",
-	});
+export const initialPersist = createAsyncThunk("users/persist", async () => {
+	try {
+		const response = await fetch(`${apiUrl}/api/users/persist`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			credentials: "include",
+		});
 
-	const data = await response.json();
-
-	if (!response.ok) {
-		throw new Error(data.error);
-	} else {
-		return data.user;
+		if (
+			!response.ok &&
+			response.status === 401 &&
+			response.statusText === "Unauthorized"
+		) {
+			throw new Error("You must login again!");
+		} else {
+			const data = await response.json();
+			return data.user;
+		}
+	} catch (e) {
+		console.error("Error persisting user: ", e);
 	}
 });
 
 export const sendFriendRequest = createAsyncThunk(
 	"users/sendFriendRequest",
 	async (body) => {
-		console.log("Sending friend request", body);
-		const response = await fetch(`${apiUrl}/api/users/sendFriendRequest`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify(body),
-		});
+		const request = () => {
+			return fetch(`${apiUrl}/api/users/sendFriendRequest`, {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify(body),
+			});
+		};
 
-		const data = await response.json();
+		let response = await request();
 
 		if (!response.ok) {
-			throw new Error(data.error);
-		} else {
-			return data;
+			response = await persist(request);
+			if (!response.ok) {
+				throw new Error(response.error);
+			}
 		}
+
+		const data = await response.json();
+		return data;
 	}
 );
 
@@ -209,16 +227,16 @@ export const userSlice = createSlice({
 			state.error = false;
 			state.loading = true;
 		});
-		builder.addCase(persist.fulfilled, (state, action) => {
+		builder.addCase(initialPersist.fulfilled, (state, action) => {
 			state.user = action.payload;
 			state.error = false;
 			state.loading = false;
 		});
-		builder.addCase(persist.rejected, (state, action) => {
+		builder.addCase(initialPersist.rejected, (state, action) => {
 			state.error = true;
 			state.loading = false;
 		});
-		builder.addCase(persist.pending, (state, action) => {
+		builder.addCase(initialPersist.pending, (state, action) => {
 			state.error = false;
 			state.loading = true;
 		});
