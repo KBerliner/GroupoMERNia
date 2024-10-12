@@ -70,6 +70,7 @@ export default function Post({ post, sendFriendRequest }) {
 	};
 
 	useEffect(() => {
+		console.log("testing for user: ", user, user?._id);
 		if (user?._id) {
 			console.log("testing for test id");
 			if (post.usersLiked.includes(user?._id)) {
