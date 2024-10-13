@@ -6,7 +6,7 @@ import ProfilePictureInput from "./ProfilePictureInput";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import CloseIcon from "@mui/icons-material/Close";
-import Image from "../../public/icon-left-font-monochrome-black.svg";
+import Image from "/icon-left-font-monochrome-black.svg";
 import xss from "xss";
 
 export default function UserForm({ loggingIn }) {
