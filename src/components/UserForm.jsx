@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import CloseIcon from "@mui/icons-material/Close";
 import Image from "/icon-left-font-monochrome-black.svg";
 import xss from "xss";
+import { ErrorSnackbar } from "./ErrorSnackbar";
 
 export default function UserForm({ loggingIn }) {
 	const loading = useSelector((state) => state.users.loading);
@@ -82,6 +83,7 @@ export default function UserForm({ loggingIn }) {
 
 	return (
 		<div className="grid place-items-center border h-screen">
+			<ErrorSnackbar errorMessage="Wrong Username or Password!" />
 			<div className="bg-[url('/FormImage.webp')] bg-cover w-screen h-screen z-0 absolute"></div>
 			<form className="flex flex-col px-24 py-20 space-y-6 bg-purple-400/25 rounded-lg backdrop-filter backdrop-blur-2xl z-10 shadow-md">
 				<CloseIcon
