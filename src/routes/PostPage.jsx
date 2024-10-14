@@ -12,7 +12,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import xss from "xss";
 import { io } from "socket.io-client";
 
-import { create } from "../features/posts/postsSlice";
+import { create, edit } from "../features/posts/postsSlice";
 
 // import Image from '../../public/'
 
@@ -20,10 +20,12 @@ import MediaInput from "../components/MediaInput";
 import PostPreview from "../components/PostPreview";
 
 export default function PostPage() {
-	const { type } = useParams();
+	const { type, _id } = useParams();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.users.user);
+	const post = useSelector((state) => state.posts.currentPost);
+
 	const [socket, setSocket] = useState(null);
 
 	const [title, setTitle] = useState("");
@@ -36,6 +38,15 @@ export default function PostPage() {
 	const apiUrl = import.meta.env.PROD
 		? "https://groupomapi-04954ed60b77.herokuapp.com"
 		: "http://localhost:3123";
+
+	useEffect(() => {
+		if (type === "edit" && _id && post !== null) {
+			setTitle(post.title);
+			setCaption(post.caption);
+			setImage(post.imageUrl);
+			setLikesEnabled(post.likesEnabled);
+		}
+	}, [post]);
 
 	useEffect(() => {
 		if (!user._id) {
@@ -76,6 +87,10 @@ export default function PostPage() {
 		if (type === "create") {
 			dispatch(create({ title, caption, image, likesEnabled }));
 			socket.emit("post");
+		}
+
+		if (type === "edit") {
+			dispatch(edit({ _id, title, caption, image, likesEnabled }));
 		}
 
 		navigate("/");

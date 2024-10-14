@@ -19,6 +19,7 @@ import {
 	MoreVert,
 	PersonAdd,
 } from "@mui/icons-material";
+import { PostOwnerMenu } from "./PostOwnerMenu";
 
 export default function Post({ post, sendFriendRequest }) {
 	const dispatch = useDispatch();
@@ -89,9 +90,7 @@ export default function Post({ post, sendFriendRequest }) {
 				subheader={post.author}
 				action={
 					post.authorId === user?._id ? (
-						<IconButton>
-							<MoreVert></MoreVert>
-						</IconButton>
+						<PostOwnerMenu postId={post._id}></PostOwnerMenu>
 					) : (
 						!user?._id?.includes(post.authorId) &&
 						user?._id && (
