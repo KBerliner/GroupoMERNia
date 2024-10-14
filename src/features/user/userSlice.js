@@ -6,12 +6,19 @@ const apiUrl = import.meta.env.PROD
 	: "http://localhost:3123";
 
 export const signup = createAsyncThunk("user/signup", async (body) => {
+	const formData = new FormData();
+	if (body.pfp) {
+		formData.append("file", body.pfp);
+	}
+
+	formData.append("email", body.email);
+	formData.append("username", body.username);
+	formData.append("password", body.password);
+
 	const response = await fetch(`${apiUrl}/api/users/signup`, {
 		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify(body),
+		body: formData,
+		credentials: "include",
 	});
 
 	const data = await response.json();
