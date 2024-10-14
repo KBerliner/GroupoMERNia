@@ -103,7 +103,7 @@ export default function HomePage() {
 			<Header onSearch={(value) => search(value)} />
 			<ul className="my-32 py-12 px-32 flex flex-col-reverse">
 				{posts &&
-					posts.map((post) => {
+					posts?.map((post) => {
 						if (
 							post.title.toLowerCase().includes(query.toLowerCase()) ||
 							post.caption.toLowerCase().includes(query.toLowerCase()) ||

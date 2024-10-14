@@ -30,8 +30,6 @@ export default function Post({
 }) {
 	// Checking if the user has liked (true) or disliked (false) the post, or neither (null)
 	const [userLikedStatus, setUserLikedStatus] = useState(null);
-	console.log(imageUrl);
-
 	return (
 		<Card className="w-96 mx-auto h-min mb-8">
 			<CardHeader
