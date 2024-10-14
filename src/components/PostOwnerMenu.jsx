@@ -4,6 +4,7 @@ import { MoreVert } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getPost } from "../features/posts/postsSlice";
+import { DeleteAlertButton } from "./DeleteAlertButton";
 
 export const PostOwnerMenu = ({ postId }) => {
 	const [open, setOpen] = useState(null);
@@ -36,7 +37,8 @@ export const PostOwnerMenu = ({ postId }) => {
 			</IconButton>
 			<Menu anchorEl={open} open={Boolean(open)} onClose={close}>
 				<MenuItem onClick={editPost}>Edit Post</MenuItem>
-				<MenuItem onClick={deletePost}>Delete Post</MenuItem>
+				{/* <MenuItem onClick={deletePost}>Delete Post</MenuItem> */}
+				<DeleteAlertButton type="post" uid={postId} />
 			</Menu>
 		</>
 	);

@@ -21,6 +21,7 @@ import ProfileTabPanel from "../components/ProfileTabPanel";
 
 import { deleteAccount, editAccount, logout } from "../features/user/userSlice";
 import ProfilePictureInput from "../components/ProfilePictureInput";
+import { DeleteAlertButton } from "../components/DeleteAlertButton";
 
 export default function ProfilePage() {
 	const dispatch = useDispatch();
@@ -189,13 +190,7 @@ export default function ProfilePage() {
 								>
 									Save
 								</Button>
-								<Button
-									variant="contained"
-									color="error"
-									onClick={handleDelete}
-								>
-									Delete Account
-								</Button>
+								<DeleteAlertButton type="user" uid={user?._id} />
 							</div>
 						</form>
 					</ProfileTabPanel>

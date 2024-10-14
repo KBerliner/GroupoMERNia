@@ -119,6 +119,26 @@ export const edit = createAsyncThunk("posts/edit", async (body) => {
 	return data;
 });
 
+export const deletePost = createAsyncThunk("posts/delete", async (uid) => {
+	const request = () => {
+		return fetch(`${apiUrl}/api/posts/delete/${uid}`, {
+			method: "DELETE",
+			credentials: "include",
+		});
+	};
+
+	let response = await request();
+
+	if (!response.ok) {
+		response = await persist(request);
+		if (!response.ok) {
+			throw new Error(response.error);
+		}
+	}
+
+	return uid;
+});
+
 export const postsSlice = createSlice({
 	name: "posts",
 	initialState: {
@@ -213,6 +233,19 @@ export const postsSlice = createSlice({
 			state.posts[editedPostIndex] = action.payload;
 		});
 		builder.addCase(edit.rejected, (state, action) => {
+			state.error = true;
+			state.loading = false;
+		});
+		builder.addCase(deletePost.pending, (state, action) => {
+			state.error = false;
+			state.loading = true;
+		});
+		builder.addCase(deletePost.fulfilled, (state, action) => {
+			state.error = false;
+			state.loading = false;
+			state.posts = state.posts.filter((post) => post._id !== action.payload);
+		});
+		builder.addCase(deletePost.rejected, (state, action) => {
 			state.error = true;
 			state.loading = false;
 		});
