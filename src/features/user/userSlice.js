@@ -100,7 +100,21 @@ export const editAccount = createAsyncThunk(
 export const deleteAccount = createAsyncThunk(
 	"user/delete_account",
 	async () => {
-		console.log("DELETE");
+		const request = () => {
+			return fetch(`${apiUrl}/api/users/`, {
+				method: "DELETE",
+				credentials: "include",
+			});
+		};
+
+		let response = await request();
+
+		if (!response.ok) {
+			response = await persist(request);
+			if (!response.ok) {
+				throw new Error(response.error);
+			}
+		}
 	}
 );
 

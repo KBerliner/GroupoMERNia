@@ -10,19 +10,14 @@ import {
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { deletePost } from "../features/posts/postsSlice";
+import { deleteAccount } from "../features/user/userSlice";
 
 export const DeleteAlertButton = ({ type, uid }) => {
 	const dispatch = useDispatch();
-
 	const [open, setOpen] = useState(false);
 
 	const dispatchDelete = () => {
-		console.log("delete post: ", uid);
-		dispatch(deletePost(uid));
-	};
-
-	const deleteAccount = () => {
-		console.log("delete account: ", uid);
+		type === "post" ? dispatch(deletePost(uid)) : dispatch(deleteAccount());
 	};
 
 	const onClickOpen = () => {
@@ -30,7 +25,7 @@ export const DeleteAlertButton = ({ type, uid }) => {
 	};
 
 	const onClickClose = () => {
-		type === "post" ? dispatchDelete() : null;
+		dispatchDelete();
 		setOpen(false);
 	};
 
