@@ -154,6 +154,7 @@ export default function PostPage() {
 						author={user.username}
 						authorPFP={user.profilePictureUrl}
 						imageUrl={image}
+						type={type}
 					/>
 				</div>
 			</div>

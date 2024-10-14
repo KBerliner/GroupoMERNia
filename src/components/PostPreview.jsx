@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { likePost, dislikePost } from "../features/posts/postsSlice";
 import {
 	Card,
 	CardHeader,
@@ -27,9 +26,11 @@ export default function Post({
 	author,
 	imageUrl,
 	likesEnabled,
+	type,
 }) {
 	// Checking if the user has liked (true) or disliked (false) the post, or neither (null)
 	const [userLikedStatus, setUserLikedStatus] = useState(null);
+	console.log(imageUrl);
 
 	return (
 		<Card className="w-96 mx-auto h-min mb-8">
@@ -48,7 +49,11 @@ export default function Post({
 					component="img"
 					height="100"
 					alt={title}
-					image={URL.createObjectURL(imageUrl)}
+					image={
+						type === "edit" && typeof imageUrl === "string"
+							? imageUrl
+							: URL.createObjectURL(imageUrl)
+					}
 					className="max-h-96"
 				/>
 			)}
