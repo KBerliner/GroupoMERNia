@@ -98,17 +98,17 @@ export default function PostPage() {
 
 	return (
 		<>
-			<div className="bg-[url('/PostFormBackground.webp')] bg-cover w-screen h-screen z-0 absolute top-0"></div>
-			<div className="my-12 mx-auto w-10/12 shadow rounded-md backdrop-filter backdrop-blur-xl">
+			<div className="bg-[url('/PostFormBackground.webp')] bg-cover z-0 fixed top-0 left-0 min-h-full w-full h-auto"></div>
+			<div className="my-12 mx-auto w-10/12 shadow rounded-md backdrop-filter backdrop-blur-xl min-h-3/4 h-full">
 				<CloseIcon
 					sx={{ fontSize: 40 }}
-					className="z-10 absolute top-8 right-8 cursor-pointer"
+					className="z-10 absolute top-8 left-8 cursor-pointer"
 					onClick={() => navigate("/")}
 				/>
 				<h1 className="font-semibold text-lg py-8 text-center">
 					{type.charAt(0).toUpperCase() + type.slice(1)} your post here!
 				</h1>
-				<div className="grid grid-cols-2">
+				<div className="grid md:grid-rows-2 md:grid-cols-1 lg:grid-cols-2 lg:grid-rows-1 ">
 					<form
 						className="space-y-6 mx-auto pb-8 flex flex-col w-64"
 						onSubmit={handleSubmit}
