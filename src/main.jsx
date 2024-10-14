@@ -31,7 +31,7 @@ const router = createBrowserRouter([
 		element: <ProfilePage />,
 	},
 	{
-		path: "/post/:type/:_id",
+		path: "/post/:type/:_id?",
 		element: <PostPage />,
 	},
 ]);
